@@ -23,8 +23,8 @@ public class SalaService {
 
     @PostMapping("/addSala")
     public String addSala(SalaDto salaDto) {
-        try {
-            sala = new Sala();
+            try {
+                sala = new Sala();
             sala.setnSala(salaDto.nomesala());
             sala.setstatusReservada(StatusSala.LIVRE);
             salaRepository.save(sala);
@@ -34,6 +34,22 @@ public class SalaService {
         } catch (Exception e) {
             return "Problema na inserção da Sala: " + e.getMessage();
 
+        }
+    }
+    @GetMapping("/statusSalas/{nsala}")
+    public String getStatusSalas(String nsala) {
+        try {
+            Optional<Sala> salaOptional = salaRepository.findByNsala(nsala);
+            if (salaOptional.isPresent()) {
+                sala = salaOptional.get();
+                sala.getstatusReservada();
+
+                return "Status sala: "+sala.getstatusReservada();
+            } else {
+                return "Sala não encontrada!";
+            }
+        } catch (Exception e) {
+            return "Problema em informar o status da Sala: " + e.getMessage();
         }
     }
 

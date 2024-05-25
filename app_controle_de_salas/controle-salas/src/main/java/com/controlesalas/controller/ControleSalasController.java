@@ -4,6 +4,7 @@ package com.controlesalas.controller;
 
 import com.controlesalas.dto.SalaDto;
 import com.controlesalas.entity.Sala;
+import com.controlesalas.enums.StatusSala;
 import com.controlesalas.service.SalaService;
 import com.netflix.discovery.EurekaClient;
 import org.springframework.beans.BeanUtils;
@@ -40,11 +41,11 @@ public class ControleSalasController {
 
         return salaService.getAvailableSala();
     }
-    @Value("${spring.application.name}")
-    private String appName;
 
-    @GetMapping("/health")
-    public String healthy() {
-        return "Estou vivo e bem! Sou a app "+appName+" - " + LocalDateTime.now();
+    @GetMapping("/statusSalas/{nsala}")
+    public String getStatusByNome(@PathVariable String nsala) {
+
+        return salaService.getStatusSalas(nsala);
     }
+
 }
