@@ -14,7 +14,15 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
+
+import static org.springframework.web.servlet.function.RequestPredicates.GET;
 
 @RestController
 public class ControleSalasController {
@@ -26,9 +34,10 @@ public class ControleSalasController {
 
 
     @PostMapping("/addSala")
-    public String addSala(@RequestBody SalaDto salaDto) {
+    public String addSala(@RequestBody SalaDto salaDto) throws URISyntaxException {
 
-        return salaService.addSala(salaDto);
+        return salaService.addSala(salaDto) ;
+
     }
     @PatchMapping ("/maintenceSala")
     public String maintenceSala(@RequestBody SalaDto salaDto) {

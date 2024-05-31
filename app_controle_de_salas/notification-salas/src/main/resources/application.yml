@@ -10,7 +10,7 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:5432/controlesalas
+    url: jdbc:postgresql://localhost:5432/notificationsalas
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver

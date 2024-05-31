@@ -5,12 +5,14 @@ import com.controlesalas.dto.SalaDto;
 import com.controlesalas.entity.Sala;
 import com.controlesalas.enums.StatusSala;
 import com.controlesalas.repository.SalaRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,22 +23,35 @@ public class SalaService {
     private Sala sala;
 
 
-    @PostMapping("/addSala")
     public String addSala(SalaDto salaDto) {
-            try {
-                sala = new Sala();
+        try {
+            sala = new Sala();
             sala.setnSala(salaDto.nomesala());
+            sala.setId(salaDto.idProfessor());
             sala.setstatusReservada(StatusSala.LIVRE);
             salaRepository.save(sala);
-            /*implementar notificacao ao microNotification*/
 
-            return "Sala cadastrada com sucesso!!";
+            String requestBody = "{\"message\": \"Nova Sala Criada: " + sala.getnSala() + "\", \"professorId\": \"" + sala.getId().toString() + "\"}";
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI("http://localhost:8184/addNotification"))
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .header("Content-Type", "application/json")
+                    .build();
+
+            HttpResponse<String> response = HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
+
+            return "Novas salas cadastradas: " + sala.getnSala() + " resposta: " + response.body().toString();
+
+        } catch (java.net.ConnectException e) {
+            return "Novas salas cadastradas: " + sala.getnSala() + " notificação não enviada. O serviço de notificação não está disponível.";
+
         } catch (Exception e) {
             return "Problema na inserção da Sala: " + e.getMessage();
-
         }
     }
-    @GetMapping("/statusSalas/{nsala}")
+
+
     public String getStatusSalas(String nsala) {
         try {
             Optional<Sala> salaOptional = salaRepository.findByNsala(nsala);
@@ -44,7 +59,7 @@ public class SalaService {
                 sala = salaOptional.get();
                 sala.getstatusReservada();
 
-                return "Status sala: "+sala.getstatusReservada();
+                return "Status sala: " + sala.getstatusReservada();
             } else {
                 return "Sala não encontrada!";
             }
@@ -53,7 +68,7 @@ public class SalaService {
         }
     }
 
-    @GetMapping("/availableSalas")
+
     public String getAvailableSala() {
         try {
             List<Sala> salasDisponiveis = salaRepository.findByStatusReservada(StatusSala.LIVRE);
@@ -64,7 +79,7 @@ public class SalaService {
         }
     }
 
-    @PatchMapping("/maintenceSala")
+
     public String maintenceSala(SalaDto salaDto) {
         try {
             Optional<Sala> salaOptional = salaRepository.findByNsala(salaDto.nomesala());
