@@ -79,6 +79,19 @@ public class SalaService {
         }
     }
 
+    public String changeStatusSala(SalaDto salaDto){
+        try {
+            sala = new Sala();
+            sala.setnSala(salaDto.nomesala());
+            sala.setstatusReservada(StatusSala.RESERVADA);
+            salaRepository.save(sala);
+
+        } catch (Exception e) {
+            return "Problema na inserção da Sala: " + e.getMessage();
+        }
+
+        return "Status RESERVADO.";
+    }
 
     public String maintenceSala(SalaDto salaDto) {
         try {

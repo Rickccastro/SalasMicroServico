@@ -36,7 +36,6 @@ public class NotificationService {
                     .build();
             HttpResponse<String> response = HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
 
-
             return "Notificação:"+ notification.getNotification() +" enviada para os professores: " + response.body();
 
         } catch (Exception e) {

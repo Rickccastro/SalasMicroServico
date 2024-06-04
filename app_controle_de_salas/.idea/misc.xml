@@ -9,6 +9,8 @@
         <option value="$PROJECT_DIR$/api/pom.xml" />
         <option value="$PROJECT_DIR$/notification-salas/pom.xml" />
         <option value="$PROJECT_DIR$/users-salas/pom.xml" />
+        <option value="$PROJECT_DIR$/Salas/pom.xml" />
+        <option value="$PROJECT_DIR$/reserva-salas/pom.xml" />
       </list>
     </option>
   </component>

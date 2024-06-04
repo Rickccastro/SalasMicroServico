@@ -64,6 +64,10 @@ public class Controller {
                 .build();
     }
 
+    
+
+
+    /*CONTROLE-SALAS*/
     @PostMapping("/controle-salas/addSala")
     public String addSalaControleSalas(@RequestBody String requestBody) throws URISyntaxException {
         URI uri = validService("CONTROLE-SALAS");
@@ -148,7 +152,7 @@ public class Controller {
         }
     }
 
-    /**/
+    /*USERS-SALAS*/
 
     @PostMapping("/user-salas/createUser")
     public String userSalasAdd(@RequestBody String requestBody) throws URISyntaxException {
@@ -192,7 +196,7 @@ public class Controller {
         }
     }
 
-    /**/
+    /*NOTIFICATION-SALAS*/
     @PostMapping("/notification-salas/addNotification")
     public String addNotification(@RequestBody String requestBody) throws URISyntaxException {
         URI uri = validService("NOTIFICATION-SALAS");
@@ -212,4 +216,26 @@ public class Controller {
             throw new RuntimeException("Failed to send HTTP request: " + e.getMessage(), e);
         }
     }
+
+    /*RESERVA-SALAS*/
+    @PostMapping("/reserva-salas/reserve")
+    public String reserve(@RequestBody String requestBody) throws URISyntaxException {
+        URI uri = validService("RESERVA-SALAS");
+        if (uri == null) {
+            return "Failed to retrieve service URI";
+        }
+        // Constrói o endpoint
+        String endpoint = "/reserve";
+
+        // Constrói e envia a requisição HTTP
+        try {
+            HttpRequest request = buildRequestWithBody(uri, endpoint, "POST", requestBody);
+            HttpResponse<String> response = HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
+            return response.body();
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            throw new RuntimeException("Failed to send HTTP request: " + e.getMessage(), e);
+        }
+    }
+
 }
+

@@ -57,4 +57,10 @@ public class ControleSalasController {
         return salaService.getStatusSalas(nsala);
     }
 
+    @PostMapping("/changeStatusSala")
+    public String changeStatusSala(@RequestBody SalaDto salaDto) {
+
+        return salaService.changeStatusSala(salaDto);
+    }
+
 }
